@@ -1,87 +1,54 @@
-# Project Title
+# Delphix Virtualization SDK
 
-One Paragraph of project description goes here
+This repository contains the Virtualization SDK for building custom data source integrations for the Delphix Dynamic Data Platform.
+
+
+The latest user documentation can be found [here](https://developer.delphix.com).
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+- macOS 10.14+, Ubuntu 16.04+, or Windows 10
+- Python 2.7 (vSDK 3.1.0 and earlier)
+- Python 3.8 (vSDK 4.0.0 and later)
+- Java 7+
+- A Delphix Engine of an [appropriate version](/References/Version_Compatibility.md)
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+To install the latest version of the SDK run:
 
 ```
-Give the example
+$ pip install dvp
 ```
 
-And repeat
+To install a specific version of the SDK run:
 
 ```
-until finished
+$ pip install dvp==<version>
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+To upgrade an existing installation of the SDK run:
 
 ```
-Give an example
+$ pip install dvp --upgrade
 ```
 
-### And coding style tests
+## Reporting a bug
 
-Explain what these tests test and why
+If you run into a problem, please search the [existing issues](https://github.com/delphix/virtualization-sdk/issues) first to ensure the issue hasn't been reported before. Open a new issue only if you haven't found anything similar to your issue.
 
-```
-Give an example
-```
+If the issue is not being tracked, please file an issue using the `Bug Report` issue template [here](https://github.com/delphix/virtualization-sdk/issues/new/choose).
 
-## Deployment
+## Requesting a feature
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+To request a feature, file a GitHub issue on this repository using the `Feature Request` issue template [here](https://github.com/delphix/virtualization-sdk/issues/new/choose).
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/delphix/.github/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Joe Smith** - *Initial work* - [Company](https://github.com/Company)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 ## License
 
-This project is licensed under the XX License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
