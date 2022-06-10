@@ -13,7 +13,7 @@ jobs:
       matrix:
         python-version: [3.8]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        package: [common, libs, platform, tools]
+        package: [common]
 
     steps:
     - name: Checkout ${{ matrix.package }} project
