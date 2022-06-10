@@ -3,6 +3,7 @@ name: Verify pull requests
 on:
   pull_request:
     types: [labeled, unlabeled]
+    branches: [master, develop]
 
 env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
@@ -59,7 +60,7 @@ jobs:
           done
 
       - name: Verify production-release label
-        if: contains (env.LABELS, 'production-release')
+        if: contains (env.LABELS, 'production-release') && github.head_ref != 'release'
         run: |
           if [ ${{ github.base_ref }} != 'master' ] && [ ${{ github.base_ref }} != 'develop' ]
           then
