@@ -13,16 +13,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Verify pull request has required labels
-        if: contains (env.LABELS, 'no-release') == false && contains (env.LABELS, 'production-release') == false && contains (env.LABELS, 'development-release') == false
         run: |
+          for label in ${{ env.LABELS }}; do
+            if [ $label == "no-release" ] || [ $label == "development-release" ] || [ $label == "production-release" ]
+            then
+              exit 0
+            fi
+          done
           echo "Pull request must have one of no-release, production-release or development-release label."
           exit 1
 
       - name: Verify pull request has correct labels
-        if: ${{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'production-release') }} || ${{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'development-release') }} || ${{ contains (env.LABELS, 'development-release') && contains (env.LABELS, 'production-release') }}
         run: |
-          echo "Pull request can only have one of no-release, production-release or development-release label."
-          exit 1
+          for label in ${{ env.LABELS }}; do
+            if ([ $label == "no-release" ] && [ $label == "development-release" ]) || ([ $label == "no-release" ] && [ $label == "production-release" ]) || ([ $label == "production-release" ] && [ $label == "development-release" ])
+            then
+              echo "Pull request can only have one of no-release, production-release or development-release label."
+              exit 1
+            fi
+          done
 
       - uses: actions/checkout@v3
         with:
