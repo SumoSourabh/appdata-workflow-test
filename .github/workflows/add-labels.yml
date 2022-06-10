@@ -15,21 +15,21 @@ jobs:
 
       - name: Add label to develop branch
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ github.base_ref == 'develop' }}
+        if: github.base_ref == 'develop'
         with:
           labels: |
             development-release
 
       - name: Add label to master branch
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ github.base_ref == 'master' }}
+        if: github.base_ref == 'master'
         with:
           labels: |
             production-release
 
       - name: Add label to other branches
         uses: actions-ecosystem/action-add-labels@v1
-        if: ${{ github.base_ref != 'master' }} && ${{ github.base_ref != 'develop' }}
+        if: github.base_ref != 'master' && github.base_ref != 'develop'
         with:
           labels: |
             no-release

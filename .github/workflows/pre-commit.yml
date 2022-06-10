@@ -1,6 +1,6 @@
 name: Pre-commit actions for Delphix Virtualization SDK
 
-on: [pull_request]
+on: [push]
 
 jobs:
   pytest38:

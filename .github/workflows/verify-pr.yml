@@ -19,7 +19,7 @@ jobs:
           exit 1
 
       - name: Verify pull request has correct labels
-        if: $ {{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'production-release') }} || $ {{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'development-release') }} || $ {{ contains (env.LABELS, 'development-release') && contains (env.LABELS, 'production-release') }}
+        if: ${{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'production-release') }} || ${{ contains (env.LABELS, 'no-release') && contains (env.LABELS, 'development-release') }} || ${{ contains (env.LABELS, 'development-release') && contains (env.LABELS, 'production-release') }}
         run: |
           echo "Pull request can only have one of no-release, production-release or development-release label.
           exit 1
