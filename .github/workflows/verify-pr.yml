@@ -12,26 +12,25 @@ jobs:
     name: verify_labels
     runs-on: ubuntu-latest
     steps:
-      - name: Verify pull request has required labels
+      - name: Verify pull request has correct labels
         run: |
+          counter=0
           for label in ${{ env.LABELS }}; do
             if [ $label == "no-release" ] || [ $label == "development-release" ] || [ $label == "production-release" ]
             then
-              exit 0
+              counter=counter + 1
             fi
           done
-          echo "Pull request must have one of no-release, production-release or development-release label."
-          exit 1
-
-      - name: Verify pull request has correct labels
-        run: |
-          for label in ${{ env.LABELS }}; do
-            if ([ $label == "no-release" ] && [ $label == "development-release" ]) || ([ $label == "no-release" ] && [ $label == "production-release" ]) || ([ $label == "production-release" ] && [ $label == "development-release" ])
-            then
-              echo "Pull request can only have one of no-release, production-release or development-release label."
-              exit 1
-            fi
-          done
+          if [ $counter == 0 ]
+          then
+            echo "Pull request must have one of no-release, production-release or development-release label."
+            exit 1
+          fi
+          if [ $counter > 1 ]
+          then
+            echo "Pull request can only have one of no-release, production-release or development-release label."
+            exit 1
+          fi
 
       - uses: actions/checkout@v3
         with:
@@ -46,7 +45,7 @@ jobs:
       - name: Verify development-release label
         if: contains (env.LABELS, 'development-release')
         run: |
-          if [ github.base_ref != 'develop' ]
+          if [ ${{ github.base_ref }} != 'develop' ]
           then
             echo "Pull request with development-release label must have base reference branch as develop."
             exit 1
@@ -62,7 +61,7 @@ jobs:
       - name: Verify production-release label
         if: contains (env.LABELS, 'production-release')
         run: |
-          if [ github.base_ref != 'master' ] || [ github.base_ref != 'develop' ]
+          if [ ${{ github.base_ref }} != 'master' ] || [ ${{ github.base_ref }} != 'develop' ]
           then
             echo "Pull request with production-release label must have base reference branch as master or develop."
             exit 1
