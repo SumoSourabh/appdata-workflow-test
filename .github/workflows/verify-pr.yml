@@ -18,15 +18,15 @@ jobs:
           for label in ${{ env.LABELS }}; do
             if [ $label == "no-release" ] || [ $label == "development-release" ] || [ $label == "production-release" ]
             then
-              $counter=$counter+1
+              $counter=$((counter+1))
             fi
           done
-          if [ $counter -eq 0 ]
+          if [ "$counter" -eq 0 ]
           then
             echo "Pull request must have one of no-release, production-release or development-release label."
             exit 1
           fi
-          if [ $counter -gt 1 ]
+          if [ "$counter" -gt 1 ]
           then
             echo "Pull request can only have one of no-release, production-release or development-release label."
             exit 1
