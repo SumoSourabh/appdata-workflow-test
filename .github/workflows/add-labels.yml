@@ -1,0 +1,35 @@
+name: Add labels to pull requests
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  addlabels:
+    name: add_labels_to_pull_requests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Add label to develop branch
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.base_ref == 'develop' }}
+        with:
+          labels: |
+            development-release
+
+      - name: Add label to master branch
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.base_ref == 'master' }}
+        with:
+          labels: |
+            production-release
+
+      - name: Add label to other branches
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ github.base_ref != 'master' }} && ${{ github.base_ref != 'develop' }}
+        with:
+          labels: |
+            no-release
