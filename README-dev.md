@@ -2,7 +2,7 @@
 
 # Delphix Virtualization SDK
 
-This README is for SDK developers. If you are a plugin developer please refer to [README.md](README.md).
+This README is for SDK. If you are a plugin developer please refer to [README.md](README.md).
 
 The artifact produced by this repository is a set of Python distributions that make up the SDK.
 
