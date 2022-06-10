@@ -21,12 +21,12 @@ jobs:
               counter=counter+1
             fi
           done
-          if [ $counter == 0 ]
+          if [ $counter -eq 0 ]
           then
             echo "Pull request must have one of no-release, production-release or development-release label."
             exit 1
           fi
-          if [ $counter > 1 ]
+          if [ $counter -gt 1 ]
           then
             echo "Pull request can only have one of no-release, production-release or development-release label."
             exit 1
