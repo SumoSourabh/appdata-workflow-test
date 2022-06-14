@@ -15,7 +15,7 @@ There are two parts of the SDK that are important to think about separately sinc
 that abstract the Virtualization API protobuf messages (published by app-gate) away from plugin developers. These expose
 the API plugin developers write against.
 
-All dependencies of a plugin must be packaged with the plugin including the protobuf messages (`dvp-api`) and the wrappers.
+All dependenciesj of a plugin must be packaged with the plugin including the protobuf messages (`dvp-api`) and the wrappers.
 This is done automatically by `dvp build`.
 
 This is what causes the slightly different workflows in development. Changes to `tools` are completely isolated from the
