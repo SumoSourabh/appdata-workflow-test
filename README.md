@@ -3,7 +3,7 @@
 This repository contains the Virtualization SDK for building custom data source integrations for the Delphix Dynamic Data Platform.
 
 
-The latest user documentation can be found [here](https://developer.delphix.com).
+The latest user documentations can be found [here](https://developer.delphix.com).
 
 ## Getting Started
 

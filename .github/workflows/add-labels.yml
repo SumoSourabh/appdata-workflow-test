@@ -1,4 +1,4 @@
-name: Add labels to pull requests
+name: "Add labels to pull requests"
 
 on:
   pull_request:
