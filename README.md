@@ -9,7 +9,7 @@ The latest user documentations can be found [here](https://developer.delphix.com
 
 ### Prerequisites
 
-- macOS 10.14+++++, Ubuntu 16.04+, or Windows 10
+- macOS 10.14++++++++, Ubuntu 16.04+, or Windows 10
 - Python 2.7 (vSDK 3.1.0 and earlier)
 - Python 3.8 (vSDK 4.0.0 and later)
 - Java 7+
