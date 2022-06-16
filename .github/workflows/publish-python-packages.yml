@@ -116,7 +116,8 @@ jobs:
       # Build each Python package and publish it to PyPi.
       - name: Build and publish ${{ matrix.package }} package to PyPi
         working-directory: ${{ matrix.package }}
-        if: env.PYTHON_INDEX == 'https://upload.pypi.org/legacy/'
+        #if: env.PYTHON_INDEX == 'https://upload.pypi.org/legacy/'
+        if: env.PYTHON_INDEX == 'https://test.pypi.org/legacy/'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.VSDK_PYPI_TOKEN }}
