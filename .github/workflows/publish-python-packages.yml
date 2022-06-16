@@ -178,5 +178,5 @@ jobs:
 
       - name: Create docs branch
         run: |
-          git checkout -b release/v${{ PACKAGE_VERSION }}
-          git push origin release/v${{ PACKAGE_VERSION }}
+          git checkout -b release/v${{ env.PACKAGE_VERSION }}
+          git push origin release/v${{ env.PACKAGE_VERSION }}
