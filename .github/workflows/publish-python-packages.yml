@@ -10,8 +10,8 @@ on:
 
 env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
-  VERSION_FILES: 'common/path/common/VERSION' 'dvp/path/VERSION' 'platform/path/platform/VERSION' 'libs/path/libs/VERSION' 'tools/path/_internal/VERSION'
-  PATH: 'src/main/python/dlpx/virtualization'
+  PATH: src/main/python/dlpx/virtualization
+  VERSION_FILES: common/path/common/VERSION dvp/path/VERSION platform/path/platform/VERSION libs/path/libs/VERSION tools/path/_internal/VERSION
 
 jobs:
   publishPythonPackages:
