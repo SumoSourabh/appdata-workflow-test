@@ -110,6 +110,7 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
           # twine upload dist/*
+          echo "files within dist"
           ls dist
 
       # Build each Python package and publish it to PyPi.
@@ -121,8 +122,15 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.VSDK_PYPI_TOKEN }}
           TWINE_REPOSITORY_URL: https://upload.pypi.org/legacy/
         run: |
-          python setup.py sdist bdist_wheel
+          packageName=dvp
+          if [ ${{ os.package }} != 'dvp' ]
+          then
+            packageName=dvp-${{ os.package }}
+          fi
+          pip download $packageName -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
+          pip download $packageName -d dist --no-deps --index-url https://test.pypi.org/simple/
           # twine upload dist/*
+          echo "files within dist"
           ls dist
 
       - name: Set package version to outputs
