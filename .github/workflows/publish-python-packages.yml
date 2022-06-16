@@ -59,7 +59,7 @@ jobs:
             if [ $label == "development-release" ] && [ ${{ github.base_ref }} == 'develop' ]
             then
               PYTHON_INDEX="https://test.pypi.org/legacy/"
-              if [[ ! $PACKAGE_VERSION =~ ^^[0-9].[0-9].[0-9].[a-z]+[0-9]+$ ]]
+              if [[ ! $PACKAGE_VERSION =~ ^[0-9].[0-9].[0-9].[a-z]+[0-9]+$ ]]
               then
                 echo "Python Packages version $PACKAGE_VERSION does not match the development version format of <MAJOR>.<MINOR>.<PATCH>.dev<RELEASE>"
                 exit 1
@@ -67,7 +67,7 @@ jobs:
             elif [ $label == "production-release" ] && [ ${{ github.base_ref }} == 'develop' ]
             then
               PYTHON_INDEX="https://test.pypi.org/legacy/"
-              if [[ ! $PACKAGE_VERSION =~ ^^[0-9].[0-9].[0-9]$ ]]
+              if [[ ! $PACKAGE_VERSION =~ ^[0-9].[0-9].[0-9]$ ]]
               then
                 echo "Python Packages version $PACKAGE_VERSION does not match the production version format of <MAJOR>.<MINOR>.<PATCH>."
                 exit 1
@@ -75,7 +75,7 @@ jobs:
             elif [ $label == "production-release" ] && [ ${{ github.base_ref }} == 'master' ]
             then
               PYTHON_INDEX="https://upload.pypi.org/legacy/"
-              if [[ ! $PACKAGE_VERSION =~ ^^[0-9].[0-9].[0-9]$ ]]
+              if [[ ! $PACKAGE_VERSION =~ ^[0-9].[0-9].[0-9]$ ]]
               then
                 echo "Python Packages version $PACKAGE_VERSION does not match the production version format of <MAJOR>.<MINOR>.<PATCH>."
                 exit 1
