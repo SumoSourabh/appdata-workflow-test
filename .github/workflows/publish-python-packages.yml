@@ -123,9 +123,9 @@ jobs:
           TWINE_REPOSITORY_URL: https://upload.pypi.org/legacy/
         run: |
           packageName=dvp
-          if [ ${{ os.package }} != 'dvp' ]
+          if [ ${{ matrix.package }} != 'dvp' ]
           then
-            packageName=dvp-${{ os.package }}
+            packageName=dvp-${{ matrix.package }}
           fi
           pip download $packageName -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
           pip download $packageName -d dist --no-deps --index-url https://test.pypi.org/simple/
