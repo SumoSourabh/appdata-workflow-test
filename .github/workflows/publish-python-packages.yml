@@ -122,7 +122,7 @@ jobs:
 
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' && contains (env.LABELS, 'development-release') }}
+    if: ${{ github.base_ref == 'develop' }} && contains (env.LABELS, 'development-release')
     needs:
       - publishPythonPackages
     steps:
@@ -133,7 +133,7 @@ jobs:
 
   postTestPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' && contains (env.LABELS, 'production-release') }}
+    if: ${{ github.base_ref == 'develop' }} && contains (env.LABELS, 'production-release')
     needs:
       - publishPythonPackages
     steps:
@@ -166,7 +166,7 @@ jobs:
 
   postPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'master' && contains (env.LABELS, 'production-release') }}
+    if: ${{ github.base_ref == 'master' }} && contains (env.LABELS, 'production-release')
     needs:
       - publishPythonPackages
     steps:
