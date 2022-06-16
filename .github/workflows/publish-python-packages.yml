@@ -101,7 +101,7 @@ jobs:
       # Build each Python package and publish it to TestPyPi.
       - name: Build and publish ${{ matrix.package }} package to TestPyPi
         working-directory: ${{ matrix.package }}
-        if: ${{ env.PYTHON_INDEX }} == 'https://test.pypi.org/legacy/'
+        if: env.PYTHON_INDEX == 'https://test.pypi.org/legacy/'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.VSDK_TEST_PYPI_TOKEN }}
@@ -114,7 +114,7 @@ jobs:
       # Build each Python package and publish it to PyPi.
       - name: Build and publish ${{ matrix.package }} package to PyPi
         working-directory: ${{ matrix.package }}
-        if: ${{ env.PYTHON_INDEX }} == 'https://upload.pypi.org/legacy/'
+        if: env.PYTHON_INDEX == 'https://upload.pypi.org/legacy/'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.VSDK_PYPI_TOKEN }}
@@ -126,7 +126,7 @@ jobs:
 
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' }} && contains (github.event.pull_request.labels.*.name, 'development-release')
+    if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'development-release')
     needs:
       - publishPythonPackages
     steps:
@@ -137,7 +137,7 @@ jobs:
 
   postTestPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' }} && contains (github.event.pull_request.labels.*.name, 'production-release')
+    if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
     steps:
@@ -170,7 +170,7 @@ jobs:
 
   postPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'master' }} && contains (github.event.pull_request.labels.*.name, 'production-release')
+    if: github.base_ref == 'master' && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
     steps:
