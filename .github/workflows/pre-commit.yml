@@ -16,7 +16,8 @@ jobs:
       matrix:
         python-version: [3.8]
         os: [ubuntu-latest, macos-latest, windows-latest]
-        package: [common]
+        # TODO: update this with all the python packages.
+        package: [common, libs]
 
     steps:
     - name: Checkout ${{ matrix.package }} project
