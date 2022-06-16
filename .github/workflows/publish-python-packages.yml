@@ -15,7 +15,7 @@ env:
 
 jobs:
   publishPythonPackages:
-    if: ${{ github.event.pull_request.merged == 'true' }} && ${{ contains (env.LABELS, 'development-release') || contains (env.LABELS, 'production-release') }}
+    if: ${{ github.event.pull_request.merged == 'true' }} && (contains (env.LABELS, 'development-release') || contains (env.LABELS, 'production-release'))
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
