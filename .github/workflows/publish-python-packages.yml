@@ -12,7 +12,7 @@ env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   COMMON_PATH: src/main/python/dlpx/virtualization
   #VERSION_FILES: format('{0} {1} {2} {3} {4}', "./common/path/common/VERSION", "./dvp/path/VERSION", "./platform/path/platform/VERSION", "./libs/path/libs/VERSION", "./tools/path/_internal/VERSION")
-  VERSION_FILES: format('{0} {1}', "./common/path/common/VERSION", "./libs/path/common/VERSION")
+  VERSION_FILES: './common/path/common/VERSION ./libs/path/common/VERSION'
 
 jobs:
   publishPythonPackages:
