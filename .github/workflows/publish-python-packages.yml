@@ -134,7 +134,7 @@ jobs:
       - name: Bump up VERSION files
         run: |
           echo "version is $PACKAGE_VERSION"
-          echo ${{ env.$PACKAGE_VERSION }}
+          echo ${{ env.PACKAGE_VERSION }}
           echo "update this when bump up action is available."
 
   postTestPypiReleaseTasks:
