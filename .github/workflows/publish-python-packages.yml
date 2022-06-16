@@ -127,7 +127,7 @@ jobs:
 
       - name: Set package version to outputs
         id: setversion
-        run: echo "::set-output name=dvpversion::sfdf"
+        run: echo "::set-output name=dvpversion::$PACKAGE_VERSION"
 
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
