@@ -133,6 +133,8 @@ jobs:
       # TODO: update this when bump up action is available
       - name: Bump up VERSION files
         run: |
+          echo "version is $PACKAGE_VERSION"
+          echo ${{ env.$PACKAGE_VERSION }}
           echo "update this when bump up action is available."
 
   postTestPypiReleaseTasks:
@@ -150,7 +152,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           branch: release
-          title: 'Release version ${{ env.PACKAGE_VERSION }} to pypi.'
+          title: |
+            Release version ${{ env.PACKAGE_VERSION }} to ${{ env.PYTHON_INDEX }}.
           body: |
             This is an automated pull request created after pushing dvp version ${{ env.PACKAGE_VERSION }} to testPyPi.
             Please follow below steps :
@@ -182,5 +185,5 @@ jobs:
 
       - name: Create docs branch
         run: |
-          git checkout -b release/v${{ env.PACKAGE_VERSION }}
-          git push origin release/v${{ env.PACKAGE_VERSION }}
+          git checkout -b docs/v$PACKAGE_VERSION
+          git push origin docs/v$PACKAGE_VERSION
