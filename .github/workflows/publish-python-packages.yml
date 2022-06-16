@@ -127,8 +127,8 @@ jobs:
           then
             packageName=dvp-${{ matrix.package }}
           fi
-          pip download $packageName -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
-          pip download $packageName -d dist --no-deps --index-url https://test.pypi.org/simple/
+          pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
+          pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --index-url https://test.pypi.org/simple/
           # twine upload dist/*
           echo "files within dist"
           ls dist
