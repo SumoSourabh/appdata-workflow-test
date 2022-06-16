@@ -16,8 +16,8 @@ env:
 
 jobs:
   publishPythonPackages:
+    if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true }} && (contains (env.LABELS, 'development-release') || contains (env.LABELS, 'production-release'))
     strategy:
       max-parallel: 5
       matrix:
@@ -125,7 +125,7 @@ jobs:
 
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' }} && contains (env.LABELS, 'development-release')
+    if: ${{ github.base_ref == 'develop' }} && contains (github.event.pull_request.labels.*.name, 'development-release')
     needs:
       - publishPythonPackages
     steps:
@@ -136,7 +136,7 @@ jobs:
 
   postTestPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'develop' }} && contains (env.LABELS, 'production-release')
+    if: ${{ github.base_ref == 'develop' }} && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
     steps:
@@ -169,7 +169,7 @@ jobs:
 
   postPypiReleaseTasks:
     runs-on: ubuntu-latest
-    if: ${{ github.base_ref == 'master' }} && contains (env.LABELS, 'production-release')
+    if: ${{ github.base_ref == 'master' }} && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
     steps:
