@@ -146,9 +146,9 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           branch: release
-          title: 'Release version ${{ PACKAGE_VERSION }} to pypi.'
+          title: 'Release version ${{ env.PACKAGE_VERSION }} to pypi.'
           body: |
-            This is an automated pull request created after pushing dvp version ${{ PACKAGE_VERSION }} to testPyPi.
+            This is an automated pull request created after pushing dvp version ${{ env.PACKAGE_VERSION }} to testPyPi.
             Please follow below steps :
               - Make sure all the checks are successful.
               - Get required approvals from code owners.
