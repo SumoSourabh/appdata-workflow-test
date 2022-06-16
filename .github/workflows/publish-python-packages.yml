@@ -11,7 +11,7 @@ on:
 env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   PATH: src/main/python/dlpx/virtualization
-  VERSION_FILES: common/path/common/VERSION dvp/path/VERSION platform/path/platform/VERSION libs/path/libs/VERSION tools/path/_internal/VERSION
+  VERSION_FILES: join([common/path/common/VERSION,dvp/path/VERSION,platform/path/platform/VERSION,libs/path/libs/VERSION,tools/path/_internal/VERSION], ' ')
 
 jobs:
   publishPythonPackages:
