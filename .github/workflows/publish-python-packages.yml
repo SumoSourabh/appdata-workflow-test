@@ -25,6 +25,8 @@ jobs:
         python-version: [3.8]
         # TODO: update this with all the python packages.
         package: [common]
+    outputs:
+      output1: ${{ steps.PackageVersion.outputs.dvpversion }}
 
     steps:
       - name: Checkout project
@@ -124,17 +126,23 @@ jobs:
           # twine upload dist/*
           ls dist
 
+      - name: PackageVersion
+        run: |
+          echo "::set-output name=dvpversion::$PACKAGE_VERSION"
+
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'development-release')
     needs:
       - publishPythonPackages
+    env:
+      DVP_VERSION: ${{ needs.publishPythonPackages.outputs.dvpversion}}
     steps:
       # TODO: update this when bump up action is available
       - name: Bump up VERSION files
         run: |
-          echo "version is $PACKAGE_VERSION"
-          echo ${{ env.PACKAGE_VERSION }}
+          echo "version is $DVP_VERSION"
+          echo ${{ env.DVP_VERSION }}
           echo "update this when bump up action is available."
 
   postTestPypiReleaseTasks:
@@ -142,6 +150,8 @@ jobs:
     if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
+    env:
+      DVP_VERSION: ${{ needs.publishPythonPackages.outputs.dvpversion}}
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
@@ -153,9 +163,9 @@ jobs:
         with:
           branch: release
           title: |
-            Release version ${{ env.PACKAGE_VERSION }} to ${{ env.PYTHON_INDEX }}.
+            Release version ${{ env.DVP_VERSION }} to TestPyPi.
           body: |
-            This is an automated pull request created after pushing dvp version ${{ env.PACKAGE_VERSION }} to testPyPi.
+            This is an automated pull request created after pushing dvp version ${{ env.DVP_VERSION }} to TestPyPi.
             Please follow below steps :
               - Make sure all the checks are successful.
               - Get required approvals from code owners.
@@ -176,6 +186,8 @@ jobs:
     if: github.base_ref == 'master' && contains (github.event.pull_request.labels.*.name, 'production-release')
     needs:
       - publishPythonPackages
+    env:
+      DVP_VERSION: ${{ needs.publishPythonPackages.outputs.dvpversion}}
     steps:
       # Creating docs branch will invoke publish-docs.yml GitHub workflow.
       - name: Checkout project
@@ -185,5 +197,5 @@ jobs:
 
       - name: Create docs branch
         run: |
-          git checkout -b docs/v$PACKAGE_VERSION
-          git push origin docs/v$PACKAGE_VERSION
+          git checkout -b docs/v$DVP_VERSION
+          git push origin docs/v$DVP_VERSION
