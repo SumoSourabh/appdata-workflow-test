@@ -3,7 +3,7 @@ name: Publish Python packages to PyPi or TestPyPi
 on:
   pull_request:
     types:
-      - edited
+      - closed
     branches:
       - master
       - develop
@@ -11,13 +11,15 @@ on:
 env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   COMMON_PATH: src/main/python/dlpx/virtualization
-  #VERSION_FILES: format('{0} {1} {2} {3} {4}', "./common/path/common/VERSION", "./dvp/path/VERSION", "./platform/path/platform/VERSION", "./libs/path/libs/VERSION", "./tools/path/_internal/VERSION")
-  VERSION_FILES: './common/path/common/VERSION ./libs/path/common/VERSION'
+  VERSION_FILES: './common/path/common/VERSION ./dvp/path/VERSION ./platform/path/platform/VERSION ./libs/path/libs/VERSION ./tools/path/_internal/VERSION'
 
 jobs:
+  ###
+  # Job is used to publish the python package to PyPi or TestPyPi.
+  # Job will invoke if the pull is merged and pull request merged had labels as development-release or production-release.
+  ###
   publishPythonPackages:
-    #if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
-    if: contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release')
+    if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
@@ -25,6 +27,7 @@ jobs:
         python-version: [3.8]
         # TODO: update this with all the python packages.
         package: [common]
+    # Output is created with the dvp version which was released to PyPi or TestPyPi.
     outputs:
       dvpversion: ${{ steps.setversion.outputs.dvpversion }}
     steps:
@@ -33,6 +36,10 @@ jobs:
         with:
            fetch-depth: 0
 
+      ###
+      # Step checks for all VERSIONs files should have the same version.
+      # If the check passes, set the PACKAGE_VERSION variable to env.
+      ###
       - name: Get the python package version to publish
         run: |
           currentPackageVersion=''
@@ -52,6 +59,13 @@ jobs:
           done
           echo "PACKAGE_VERSION=$(echo $currentPackageVersion)" >> $GITHUB_ENV
 
+      ###
+      # Step perform following tasks
+      # | BRANCH  |       LABEL         |         PYTHON_INDEX            |               PACKAGE_VERSION                     |
+      # | develop | development-release | https://test.pypi.org/legacy/   | should match <MAJOR>.<MINOR>.<PATCH>.dev<RELEASE> |
+      # | develop | production-release  | https://test.pypi.org/legacy/   | should match <MAJOR>.<MINOR>.<PATCH>              |
+      # | master  | production-release  | https://upload.pypi.org/legacy/ | should match <MAJOR>.<MINOR>.<PATCH>              |
+      ###
       - name: Identify the python index
         run: |
           PYTHON_INDEX=""
@@ -113,11 +127,13 @@ jobs:
           echo "files within dist"
           ls dist
 
-      # Build each Python package and publish it to PyPi.
+      ###
+      # Download the whl and tar file form TestPyPi for the version to be released to PyPI.
+      # Upload the downloaded content to PyPi.
+      ###
       - name: Build and publish ${{ matrix.package }} package to PyPi
         working-directory: ${{ matrix.package }}
-        #if: env.PYTHON_INDEX == 'https://upload.pypi.org/legacy/'
-        if: env.PYTHON_INDEX == 'https://test.pypi.org/legacy/'
+        if: env.PYTHON_INDEX == 'https://upload.pypi.org/legacy/'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.VSDK_PYPI_TOKEN }}
@@ -134,10 +150,15 @@ jobs:
           echo "files within dist"
           ls -lrt dist
 
+      # Set the PACKAGE_VERSION to output dvpversion
       - name: Set package version to outputs
         id: setversion
         run: echo "::set-output name=dvpversion::$PACKAGE_VERSION"
 
+  ###
+  # - Run the job is target branch is develop and label is development-release.
+  # - Bump up the version in VERSION files.
+  ###
   postDevelopmentReleaseTasks:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'development-release')
@@ -149,6 +170,11 @@ jobs:
         run: |
           echo "update version ${{ needs.publishPythonPackages.outputs.dvpversion }} when bump up action is available."
 
+  ###
+  # - Run the job is target branch is develop and label is production-release.
+  # - Create a PR by creating a release branch from develop and raise it to target branch as master.
+  # - Bump up the version in develop.
+  ###
   postTestPypiReleaseTasks:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop' && contains (github.event.pull_request.labels.*.name, 'production-release')
@@ -184,6 +210,10 @@ jobs:
         run: |
           echo "update version ${{ needs.publishPythonPackages.outputs.dvpversion }} when bump up action is available."
 
+  ###
+  # - Run the job is target branch is master and label is development-release.
+  # - Create a docs/<version> branch to publish the docs to developer.delphix.com
+  ###
   postPypiReleaseTasks:
     runs-on: ubuntu-latest
     if: github.base_ref == 'master' && contains (github.event.pull_request.labels.*.name, 'production-release')
