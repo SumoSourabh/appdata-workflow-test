@@ -3,7 +3,7 @@ name: Publish Python packages to PyPi or TestPyPi
 on:
   pull_request:
     types:
-      - edited
+      - closed
     branches:
       - master
       - develop
@@ -19,7 +19,7 @@ jobs:
   # Job will invoke if the pull is merged and pull request merged had labels as development-release or production-release.
   ###
   publishPythonPackages:
-    if: contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release')
+    if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
