@@ -182,24 +182,28 @@ jobs:
         with:
           ref: develop
 
+      - name: Create release branch
+        run: |
+          git checkout -b release develop
+          git push origin release
+
       - name: Create pull request into master
-        uses: peter-evans/create-pull-request@v4
+        uses: repo-sync/pull-request@v2
         with:
-          branch: release
-          base: master
-          title: |
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: release
+          destination_branch: master
+          pr_title: |
             Release version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
-          body: |
+          pr_body: |
             This is an automated pull request created after pushing dvp version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
             Please follow below steps :
               - Make sure all the checks are successful.
               - Get required approvals from code owners.
             Once done, merge the pull request with "merge commit" (do not use a squash commit!).
               - Merge should invoke a release to pypi.
-          labels: |
-            production-release
-          delete-branch: true
-          draft: false
+          pr_label: production-release
+          pr_draft: false
 
       # TODO: update this when bump up action is available
       - name: Bump up VERSION files
@@ -226,3 +230,7 @@ jobs:
         run: |
           git checkout -b docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
           git push origin docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
+
+      - name: Delete release branch
+        run: |
+          git push origin --delete release
