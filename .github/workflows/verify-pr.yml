@@ -83,7 +83,7 @@ jobs:
           if [ ${{ github.head_ref }} != 'release' ]
           then
             for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-              if [[ $file != *"VERSION"* ]] || [[ $file != *".bumpversion.cfg"* ]]
+              if [[ $file != *"VERSION"* ]] && [[ $file != *".bumpversion.cfg"* ]]
               then
                   echo "Pull request with production-release label must only have VERSION updates to python Packages."
                   exit 1
