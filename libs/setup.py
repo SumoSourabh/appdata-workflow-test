@@ -6,7 +6,7 @@ PYTHON_SRC = 'src/main/python'
 with open(os.path.join(PYTHON_SRC, 'dlpx/virtualization/common/VERSION')) as version_file:
     version = version_file.read().strip()
 
-setuptools.setup(name='appdata-workflow-test-common',
+setuptools.setup(name='appdata-workflow-test-libs',
                  version=version,
                  package_dir={'': PYTHON_SRC},
                  packages=setuptools.find_packages(PYTHON_SRC),
