@@ -182,10 +182,15 @@ jobs:
         with:
           ref: develop
 
+      - name: Create release branch
+        run: |
+          git checkout -b release develop
+          git push origin release
+
       - name: Create pull request into master
-        uses: peter-evans/create-pull-request@v4
+        uses: thomaseizinger/create-pull-request@v1
         with:
-          branch: release
+          head: release
           base: master
           title: |
             Release version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
@@ -199,7 +204,6 @@ jobs:
           labels: |
             production-release
           delete-branch: true
-          draft: false
 
       # TODO: update this when bump up action is available
       - name: Bump up VERSION files
