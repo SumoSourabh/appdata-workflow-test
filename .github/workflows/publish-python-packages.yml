@@ -202,8 +202,7 @@ jobs:
               - Get required approvals from code owners.
             Once done, merge the pull request with "merge commit" (do not use a squash commit!).
               - Merge should invoke a release to pypi.
-          pr_label: |
-            production-release
+          pr_label: production-release
           pr_draft: false
 
       # TODO: update this when bump up action is available
