@@ -188,7 +188,7 @@ jobs:
           git push origin release
 
       - name: Create pull request into master
-        uses: thomaseizinger/create-pull-request@v1
+        uses: thomaseizinger/create-pull-request@v1.2.2
         with:
           head: release
           base: master
