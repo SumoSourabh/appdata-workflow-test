@@ -39,11 +39,13 @@ jobs:
       run: |
         pip install . --find-links https://test.pypi.org/simple/dvp-api/
 
+    # Run all the test cases part of the package.
     - name: Test ${{ matrix.package }} project with pytest
       working-directory: ${{ matrix.package }}
       run: |
         python -m pytest src/test/python
 
+    # Install flake8 and run linting on src and test for linting if OS is ubuntu.
     - name: Install flake8
       if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |

@@ -14,6 +14,10 @@ jobs:
     name: verify_labels
     runs-on: ubuntu-latest
     steps:
+      ###
+      # 1. Every pull request must have either of one labels no-release, development-release or production-release.
+      # 2. Also, every pull request can only have one of the labels from no-release, development-release or production-release.
+      ###
       - name: Verify pull request has correct labels
         run: |
           counter=0
@@ -37,12 +41,17 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
 
+      # Get all the changed files which are part of the pull request.
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v22
         with:
           since_last_remote_commit: 'true'
 
+      ###
+      # - development-release label must have target branch as develop.
+      # - development-release label must not have VERSION files changes.
+      ###
       - name: Verify development-release label
         if: contains (env.LABELS, 'development-release')
         run: |
@@ -59,6 +68,10 @@ jobs:
               fi
           done
 
+      ###
+      # - production-release label must have target branch as develop or master.
+      # - production-release label must have VERSION files changes only if the head branch is not release.
+      ###
       - name: Verify production-release label
         if: contains (env.LABELS, 'production-release')
         run: |
