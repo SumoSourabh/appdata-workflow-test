@@ -16,7 +16,7 @@ env:
 jobs:
   ###
   # Job is used to publish the python package to PyPi or TestPyPi.
-  # Job will invoke if the pull is merged and pull request merged had labels as development-release or production-release.
+  # Job will invoke if the pull request is merged and pull request merged had labels as development-release or production-release.
   ###
   publishPythonPackages:
     if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
