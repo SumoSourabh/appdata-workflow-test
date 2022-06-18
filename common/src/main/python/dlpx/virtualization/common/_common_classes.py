@@ -14,7 +14,7 @@ class ArithmeticOperations(object):
     """class for Arithmetic Operations.
 
     Args:
-        variable first: Operation First variable.
+        variable first: Operation First variable sd.
         variable second: Operation Second variable.
 
     """
