@@ -6,6 +6,10 @@ on:
       - master
       - develop
       - release
+  pull_request_review:
+    types: [ submitted ]
+    branches:
+      - master
 
 jobs:
   pytest38:
