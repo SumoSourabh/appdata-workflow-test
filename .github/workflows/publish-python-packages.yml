@@ -124,7 +124,7 @@ jobs:
           TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
         run: |
           python setup.py sdist bdist_wheel
-          twine upload dist/*
+          # twine upload dist/*
 
       ###
       # Download the whl and tar file form TestPyPi for the version to be released to PyPI.
@@ -145,7 +145,7 @@ jobs:
           fi
           pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
           pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --only-binary :all: --index-url https://test.pypi.org/simple/
-          twine upload dist/*
+          # twine upload dist/*
 
       # Set the PACKAGE_VERSION to output dvpversion
       - name: Set package version to outputs
@@ -231,6 +231,9 @@ jobs:
         run: |
           git checkout -b docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
           git push origin docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
+
+      - name: Run docs workflow
+        uses: ./.github/workflows/publish-docs.yml
 
       - name: Delete release branch
         run: |
