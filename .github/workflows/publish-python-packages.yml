@@ -12,7 +12,7 @@ env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   COMMON_PATH: src/main/python/dlpx/virtualization
   VERSION_FILES: './common/path/common/VERSION ./libs/path/common/VERSION'
-  PACKAGE_PREFIX: dvp
+  PACKAGE_PREFIX: appdata-workflow-test
 
 jobs:
   ###
