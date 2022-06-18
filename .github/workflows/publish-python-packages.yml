@@ -12,11 +12,12 @@ env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   COMMON_PATH: src/main/python/dlpx/virtualization
   VERSION_FILES: './common/path/common/VERSION ./libs/path/common/VERSION'
+  PACKAGE_PREFIX: dvp
 
 jobs:
   ###
   # Job is used to publish the python package to PyPi or TestPyPi.
-  # Job will invoke if the pull request is merged and pull request merged had labels as development-release or production-release.
+  # Job will be invoked if the pull request is merged and pull request merged had labels as development-release or production-release.
   ###
   publishPythonPackages:
     if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'development-release') || contains(github.event.pull_request.labels.*.name, 'production-release'))
@@ -123,7 +124,7 @@ jobs:
           TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
         run: |
           python setup.py sdist bdist_wheel
-          # twine upload dist/*
+          twine upload dist/*
 
       ###
       # Download the whl and tar file form TestPyPi for the version to be released to PyPI.
@@ -137,14 +138,14 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.VSDK_PYPI_TOKEN }}
           TWINE_REPOSITORY_URL: https://upload.pypi.org/legacy/
         run: |
-          packageName=dvp
-          if [ ${{ matrix.package }} != 'dvp' ]
+          packageName=${{ env.PACKAGE_PREFIX }}
+          if [ ${{ matrix.package }} != ${{ env.PACKAGE_PREFIX }} ]
           then
-            packageName=appdata-workflow-test-${{ matrix.package }}
+            packageName=${{ env.PACKAGE_PREFIX }}-${{ matrix.package }}
           fi
           pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --no-binary :all: --index-url https://test.pypi.org/simple/
           pip download $packageName==$PACKAGE_VERSION -d dist --no-deps --only-binary :all: --index-url https://test.pypi.org/simple/
-          # twine upload dist/*
+          twine upload dist/*
 
       # Set the PACKAGE_VERSION to output dvpversion
       - name: Set package version to outputs
@@ -194,9 +195,9 @@ jobs:
           source_branch: release
           destination_branch: master
           pr_title: |
-            Release version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
+            Release version ${{ needs.publishPythonPackages.outputs.dvpversion }} to PyPi.
           pr_body: |
-            This is an automated pull request created after pushing dvp version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
+            This is an automated pull request created after pushing dvp version ${{ needs.publishPythonPackages.outputs.dvpversion }} to PyPi.
             Please follow below steps :
               - Make sure all the checks are successful.
               - Get required approvals from code owners.
