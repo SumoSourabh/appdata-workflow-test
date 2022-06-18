@@ -22,7 +22,7 @@ class ArithmeticOperations(object):
         if first:
             self.__first = first
         else:
-            raise ArithmeticException("First variable can not be null or zero.")
+            raise ArithmeticException("First variable can not   be null or zero.")
 
         if second:
             self.__second = second
