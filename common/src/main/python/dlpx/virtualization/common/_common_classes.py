@@ -14,7 +14,7 @@ class ArithmeticOperations(object):
     """class for Arithmetic Operations.
 
     Args:
-        variable first: Operation First variable.
+        variable first: Operation First variable sd.
         variable second: Operation Second variable.
 
     """
@@ -22,7 +22,7 @@ class ArithmeticOperations(object):
         if first:
             self.__first = first
         else:
-            raise ArithmeticException("First variable can not   be null or zero.")
+            raise ArithmeticException("First variable can not be null or zero.")
 
         if second:
             self.__second = second
