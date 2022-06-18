@@ -237,7 +237,9 @@ jobs:
           git push origin --delete release
 
   releaseDocs:
-    needs: postPypiReleaseTasks
+    needs:
+      - postPypiReleaseTasks
+      - publishPythonPackages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
