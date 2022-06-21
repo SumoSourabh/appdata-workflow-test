@@ -10,7 +10,6 @@ on:
     paths:
       - 'docs/**'
       - '.github/workflows/publish-docs.yml'
-  workflow_call:
 
 jobs:
   publish:

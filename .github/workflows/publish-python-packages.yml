@@ -11,6 +11,7 @@ on:
 env:
   LABELS: ${{ join( github.event.pull_request.labels.*.name, ' ' ) }}
   COMMON_PATH: src/main/python/dlpx/virtualization
+  # TODO: update this virtualization specific paths.
   VERSION_FILES: './common/path/common/VERSION ./libs/path/common/VERSION'
   PACKAGE_PREFIX: appdata-workflow-test
 
@@ -197,11 +198,11 @@ jobs:
           pr_title: |
             Release version ${{ needs.publishPythonPackages.outputs.dvpversion }} to PyPi.
           pr_body: |
-            This is an automated pull request created after pushing dvp version ${{ needs.publishPythonPackages.outputs.dvpversion }} to PyPi.
+            This is an automated pull request created after pushing dvp version ${{ needs.publishPythonPackages.outputs.dvpversion }} to TestPyPi.
             Please follow below steps :
               - Make sure all the checks are successful.
               - Get required approvals from code owners.
-            Once done, merge the pull request with "merge commit" (do not use a squash commit!).
+            Once done, merge the pull request with merge commit (do not use a squash commit!).
               - Merge should invoke a release to pypi.
           pr_label: production-release
           pr_draft: false
@@ -212,8 +213,7 @@ jobs:
           echo "update version ${{ needs.publishPythonPackages.outputs.dvpversion }} when bump up action is available."
 
   ###
-  # - Run the job is target branch is master and label is development-release.
-  # - Create a docs/<version> branch to publish the docs to developer.delphix.com
+  # - Run the job is target branch is master and label is production-release.
   ###
   postPypiReleaseTasks:
     runs-on: ubuntu-latest
@@ -221,31 +221,6 @@ jobs:
     needs:
       - publishPythonPackages
     steps:
-      # Creating docs branch will invoke publish-docs.yml GitHub workflow.
-      - name: Checkout project
-        uses: actions/checkout@v3
-        with:
-          ref: master
-
-      - name: Create docs branch
-        run: |
-          git checkout -b docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
-          git push origin docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
-
       - name: Delete release branch
         run: |
           git push origin --delete release
-
-  releaseDocs:
-    needs:
-      - postPypiReleaseTasks
-      - publishPythonPackages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v3
-        with:
-          ref: docs/v${{ needs.publishPythonPackages.outputs.dvpversion }}
-
-      - name: Run docs workflow
-        uses: ./.github/workflows/publish-docs.yml
