@@ -46,7 +46,7 @@ jobs:
 
       # Committing and pushing the changes
       - name: Commit and Push
-        if: env.changes_exist == 'true'
+        if: env.changes_exist == true
         run: |
           git commit -a -m "Bumping-up the version using workflow"
           git push
