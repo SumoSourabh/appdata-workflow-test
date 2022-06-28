@@ -35,22 +35,8 @@ jobs:
         run: |
           bumpversion release
 
-      # Verifying if any changes
-      - name: Check for changes
-        run: |
-          if git diff --exit-code; then
-            echo "changes_exist=true" >> $GITHUB_ENV
-          else
-            echo "changes_exist=false" >> $GITHUB_ENV
-          fi
-
-      - name: logging
-        run: |
-          echo env.changes_exist
-
-      # Committing and pushing the changes
+        # Committing and pushing the changes
       - name: Commit and Push
-        if: env.changes_exist == true
         run: |
           git commit -a -m "Bumping-up the version using workflow"
           git push
