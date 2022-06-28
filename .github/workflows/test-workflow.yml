@@ -1,4 +1,4 @@
-name: "Test Bump-up verison"
+name: "Test Bump-up version"
 
 on:
   pull_request:
@@ -8,5 +8,5 @@ jobs:
     name: Test bump-up
     uses: ./.github/workflows/bump-version.yml
     with:
-      flag: dev
-      currentVersion: 1.0.2.dev1
+      flag: patch
+      currentVersion: 1.0.3
