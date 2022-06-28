@@ -9,3 +9,4 @@ jobs:
     uses: ./.github/workflows/bump-version.yml
     with:
       flag: dev
+      currentVersion: 1.0.2.dev1
