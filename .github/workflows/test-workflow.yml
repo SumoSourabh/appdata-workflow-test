@@ -8,4 +8,4 @@ jobs:
     name: Test bump-up
     uses: ./.github/workflows/bump-version.yml
     with:
-      flag: patch
+      flag: dev
