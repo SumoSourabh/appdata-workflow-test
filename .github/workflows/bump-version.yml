@@ -44,6 +44,10 @@ jobs:
             echo "changes_exist=false" >> $GITHUB_ENV
           fi
 
+      - name: logging
+        run: |
+          echo env.changes_exist
+
       # Committing and pushing the changes
       - name: Commit and Push
         if: env.changes_exist == true
