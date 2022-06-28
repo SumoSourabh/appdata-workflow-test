@@ -7,9 +7,6 @@ on:
 jobs:
   addlabels:
     name: Test bump-up
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test bump-up
-        uses: ./.github/workflows/bump-version.yml@bumpversion
-        with:
-          flag: patch
+    uses: ./.github/workflows/bump-version.yml@bumpversion
+    with:
+      flag: patch
