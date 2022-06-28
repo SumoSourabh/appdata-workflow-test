@@ -46,8 +46,6 @@ jobs:
 
       # Committing and pushing the changes
       - name: Commit and Push
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ env.changes_exist == 'true' }}
         run: |
           git commit -a -m "Bumping-up the version using workflow"
