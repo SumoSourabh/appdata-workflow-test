@@ -25,13 +25,13 @@ jobs:
 
       # Bumping-up the dev version
       - name: Bump-up the dev version
-        if: ${{ inputs.flag }} == 'patch'
+        if: inputs.flag == 'patch'
         run: |
           bumpversion patch
 
       # Bumping-up the release version
       - name: Bump-up the release version
-        if: ${{ inputs.flag }} == 'release'
+        if: inputs.flag == 'release'
         run: |
           bumpversion release
 

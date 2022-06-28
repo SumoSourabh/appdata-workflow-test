@@ -2,7 +2,6 @@ name: "Test Bump-up verison"
 
 on:
   pull_request:
-    types: [opened, reopened]
 
 jobs:
   addlabels:
