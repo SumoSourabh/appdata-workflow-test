@@ -7,6 +7,6 @@ on:
 jobs:
   addlabels:
     name: Test bump-up
-    uses: ./.github/workflows/bump-version.yml@bumpversion
+    uses: ./.github/workflows/bump-version.yml
     with:
       flag: patch
