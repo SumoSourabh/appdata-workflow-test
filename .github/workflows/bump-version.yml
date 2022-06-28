@@ -30,7 +30,7 @@ jobs:
           bumpversion patch
 
       # Bumping-up the release version
-      - name: Bump-up the release version
+      - name: Bump-up the dev version
         if: inputs.flag == 'dev'
         run: |
           bumpversion dev
@@ -38,7 +38,7 @@ jobs:
         # Committing and pushing the changes
       - name: Commit and Push
         run: |
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.name "Bump-up Version GitHub Action"
           git config --global user.email "username@users.noreply.github.com"
           git commit -a -m "Bumping-up the version using workflow"
           git push
