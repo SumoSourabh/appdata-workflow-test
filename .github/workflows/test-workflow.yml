@@ -1,0 +1,12 @@
+name: "Test Bump-up version"
+
+on:
+  pull_request:
+
+jobs:
+  addlabels:
+    name: Test bump-up
+    uses: ./.github/workflows/bump-version.yml
+    with:
+      flag: patch
+      currentVersion: 1.0.3
