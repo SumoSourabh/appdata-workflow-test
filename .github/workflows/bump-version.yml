@@ -30,28 +30,15 @@ jobs:
       # Set the environment variables for current_version and new_version
       - name: Set environment variables
         run: |
-          currentVersion=$(bumpversion --dry-run --list release | grep current_version | sed -r s,"^.*=",,)
+          currentVersion=$(bumpversion --dry-run --list ${{ inputs.flag }} | grep current_version | sed -r s,"^.*=",,)
           echo "CURRENT_VERSION=$(echo $currentVersion)" >> $GITHUB_ENV
-          newVersion=$(bumpversion --dry-run --list release | grep new_version | sed -r s,"^.*=",,)
+          newVersion=$(bumpversion --dry-run --list ${{ inputs.flag }} | grep new_version | sed -r s,"^.*=",,)
           echo "NEW_VERSION=$(echo $newVersion)" >> $GITHUB_ENV
 
-      # Bumping-up the patch version
-      - name: Bump-up the patch version
-        if: inputs.flag == 'patch'
+      # Bumping-up the version
+      - name: Bump-up the ${{ inputs.flag }} version
         run: |
-          bumpversion patch
-
-      # Bumping-up the dev version
-      - name: Bump-up the dev version
-        if: inputs.flag == 'dev'
-        run: |
-          bumpversion dev
-
-      # Bumping-up the release version
-      - name: Bump-up the release version
-        if: inputs.flag == 'release'
-        run: |
-          bumpversion release
+          bumpversion ${{ inputs.flag }}
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v4
