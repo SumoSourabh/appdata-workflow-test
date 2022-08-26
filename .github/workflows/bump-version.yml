@@ -36,7 +36,7 @@ jobs:
           echo "NEW_VERSION=$(echo $newVersion)" >> $GITHUB_ENV
 
       # Bumping-up the version
-      - name: Bump-up the ${{ inputs.flag }} version
+      - name: Bump-up ${{ env.CURRENT_VERSION }} -> ${{ env.NEW_VERSION }} version
         run: |
           bumpversion ${{ inputs.flag }}
 
