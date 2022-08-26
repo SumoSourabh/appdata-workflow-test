@@ -1,12 +1,15 @@
-name: "Test Bump-up version"
+name: "Test Bump-up the version manually"
 
 on:
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      flag:
+        required: true
+        type: string
+        description: "Flag like dev, patch and release."
 
 jobs:
-  addlabels:
-    name: Test bump-up
+  testbumpupversion:
     uses: ./.github/workflows/bump-version.yml
     with:
-      flag: patch
-      currentVersion: 1.0.3
+      flag: ${{ inputs.flag }}

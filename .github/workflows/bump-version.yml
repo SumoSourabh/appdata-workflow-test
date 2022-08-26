@@ -1,3 +1,7 @@
+#
+# Copyright (c) 2022 by Delphix. All rights reserved.
+#
+
 name: "Bump-up the version on develop branch"
 
 on:
@@ -6,12 +10,11 @@ on:
       flag:
         required: true
         type: string
-      currentVersion:
-        required: true
-        type: string
+        description: "Provide a flag like dev, patch and release to bump up version."
+
 jobs:
   bumpversion:
-    name: Bump-up the version
+    name: Bump-up the version using ${{ inputs.flag }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
@@ -23,6 +26,14 @@ jobs:
       - name: Install bumpversion dependencies
         run: |
           pip install bumpversion
+
+      # Set the environment variables for current_version and new_version
+      - name: Set environment variables
+        run: |
+          currentVersion=$(bumpversion --dry-run --list release | grep current_version | sed -r s,"^.*=",,)
+          echo "CURRENT_VERSION=$(echo $currentVersion)" >> $GITHUB_ENV
+          newVersion=$(bumpversion --dry-run --list release | grep new_version | sed -r s,"^.*=",,)
+          echo "NEW_VERSION=$(echo $newVersion)" >> $GITHUB_ENV
 
       # Bumping-up the patch version
       - name: Bump-up the patch version
@@ -36,10 +47,51 @@ jobs:
         run: |
           bumpversion dev
 
-        # Committing and pushing the changes
+      # Bumping-up the release version
+      - name: Bump-up the release version
+        if: inputs.flag == 'release'
+        run: |
+          bumpversion release
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Install tools dependencies
+        working-directory: common
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt --find-links https://test.pypi.org/simple/dvp-api/
+
+      - name: Install tools project
+        working-directory: common
+        run: |
+          pip install . --find-links https://test.pypi.org/simple/dvp-api/
+
+      # Run all the test cases part of the package.
+      - name: Test tools project with pytest
+        working-directory: common
+        run: |
+          python -m pytest src/test/python
+
+      # Install flake8 and run linting on src and test for linting if OS is ubuntu.
+      - name: Install flake8
+        run: |
+          pip install flake8
+
+      - name: Run flake8 for linting src directory
+        working-directory: common
+        run: python -m flake8 src/main/python --max-line-length 88
+
+      - name: Run flake8 for linting test directory
+        working-directory: common
+        run: python -m flake8 src/test/python --max-line-length 88
+
+      # Committing and pushing the changes
       - name: Commit and Push
         run: |
           git config --global user.name "GitHub Action: Bump-up Version"
           git config --global user.email "username@users.noreply.github.com"
-          git commit -a -m "Bumping-up the ${{ inputs.flag }} version from ${{ inputs.currentVersion }}"
+          git commit -a -m "Bump up $CURRENT_VERSION -> $NEW_VERSION"
           git push
