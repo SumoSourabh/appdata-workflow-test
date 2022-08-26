@@ -17,10 +17,19 @@ jobs:
     name: Bump-up the version using ${{ inputs.flag }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout project
+      # If the flag is dev and patch -> branch is develop,
+      - name: Checkout Develop branch
         uses: actions/checkout@v3
+        if: inputs.flag == 'dev' || inputs.flag == 'patch'
         with:
           ref: develop
+
+      # If the flag is release -> branch is master
+      - name: Checkout Master branch
+        uses: actions/checkout@v3
+        if: inputs.flag == 'release'
+        with:
+          ref: master
 
       # Install bumpversion dependencies, necessary for bumping-up the version.
       - name: Install bumpversion dependencies
