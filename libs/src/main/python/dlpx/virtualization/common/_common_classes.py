@@ -9,7 +9,7 @@ __all__ = ["ArithmeticOperations"]
 
 from dlpx.virtualization.common.exceptions import ArithmeticException
 
-DVP_VERSION = '1.0.5.dev2'
+DVP_VERSION = '1.0.5.dev3'
 
 
 class ArithmeticOperations(object):
