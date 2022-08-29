@@ -19,7 +19,7 @@ jobs:
     steps:
       # If the flag is dev and patch -> branch is develop, flag is release -> branch is master
       - name: identify the head branch
-      - run: |
+        run: |
           if [ ${{ inputs.flag }} == "dev" ] || [ ${{ inputs.flag }} == "patch" ]
           then
             echo "BASE_BRANCH=$(echo develop)" >> $GITHUB_ENV
