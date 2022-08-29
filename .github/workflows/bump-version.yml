@@ -27,7 +27,7 @@ jobs:
           then
             echo "BASE_BRANCH=$(echo master)" >> $GITHUB_ENV
           else
-            echo "Provide a valid flag from \"dev\", \"patch\" or \"release\".
+            echo "Provide a valid flag from \"dev\", \"patch\" or \"release\"."
             exit 1
           fi
 
