@@ -11,33 +11,23 @@ on:
         required: true
         type: string
         description: "Provide a flag like dev, patch and release to bump up version."
+      base:
+        required: true
+        type: string
+        description: "Provide a branch name."
 
 jobs:
   bumpversion:
     name: Bump-up the version using ${{ inputs.flag }}
     runs-on: ubuntu-latest
     steps:
-      # If the flag is dev and patch -> branch is develop, flag is release -> branch is master
-      - name: identify the head branch
-        run: |
-          if [ ${{ inputs.flag }} == "dev" ] || [ ${{ inputs.flag }} == "patch" ]
-          then
-            echo "BASE_BRANCH=$(echo develop)" >> $GITHUB_ENV
-          elif [ ${{ inputs.flag }} == 'release' ]
-          then
-            echo "BASE_BRANCH=$(echo master)" >> $GITHUB_ENV
-          else
-            echo "Provide a valid flag from \"dev\", \"patch\" or \"release\"."
-            exit 1
-          fi
-
-      - name: Checkout ${{ env.BASE_BRANCH }} branch
+      - name: Checkout ${{ inputs.base }} branch
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.BASE_BRANCH }}
+          ref: ${{ inputs.base }}
 
       - name: Create new branch as dlpx/bumpup/${{ inputs.flag }}
-        run: git checkout -b dlpx/bumpup/${{ inputs.flag }} ${{ env.BASE_BRANCH }}
+        run: git checkout -b dlpx/bumpup/${{ inputs.flag }} ${{ inputs.base }}
 
       # Install bumpversion dependencies, necessary for bumping-up the version.
       - name: Install bumpversion dependencies
@@ -70,7 +60,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_branch: dlpx/bumpup/${{ inputs.flag }}
-          destination_branch: ${{ env.BASE_BRANCH }}
+          destination_branch: ${{ inputs.base }}
           pr_title: |
             <JIRA-Placeholder> Bump up $CURRENT_VERSION -> $NEW_VERSION
           pr_body: |
