@@ -7,9 +7,14 @@ on:
         required: true
         type: string
         description: "Flag like dev, patch and release."
+      base:
+        required: true
+        type: string
+        description: "Provide a branch name."
 
 jobs:
   testbumpupversion:
     uses: ./.github/workflows/bump-version.yml
     with:
       flag: ${{ inputs.flag }}
+      base: ${{ inputs.base }}
