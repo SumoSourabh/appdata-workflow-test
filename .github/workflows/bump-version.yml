@@ -1,0 +1,84 @@
+#
+# Copyright (c) 2022 by Delphix. All rights reserved.
+#
+
+name: "Bump-up the version"
+
+on:
+  workflow_call:
+    inputs:
+      flag:
+        required: true
+        type: string
+        description: "Provide a flag like dev, patch and release to bump up version."
+      base:
+        required: true
+        type: string
+        description: "Provide a branch name."
+
+jobs:
+  bumpversion:
+    name: Bump-up the version using ${{ inputs.flag }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ inputs.base }} branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.base }}
+
+      - name: Create new branch as dlpx/bumpup/${{ inputs.flag }}
+        run: git checkout -b dlpx/bumpup/${{ inputs.flag }} ${{ inputs.base }}
+
+      # Install bumpversion dependencies, necessary for bumping-up the version.
+      - name: Install bumpversion dependencies
+        run: |
+          pip install bumpversion
+
+      # Set the environment variables for current_version and new_version
+      - name: Set environment variables
+        run: |
+          currentVersion=$(bumpversion --dry-run --list ${{ inputs.flag }} | grep current_version | sed -r s,"^.*=",,)
+          echo "CURRENT_VERSION=$(echo $currentVersion)" >> $GITHUB_ENV
+          newVersion=$(bumpversion --dry-run --list ${{ inputs.flag }} | grep new_version | sed -r s,"^.*=",,)
+          echo "NEW_VERSION=$(echo $newVersion)" >> $GITHUB_ENV
+
+      # Bumping-up the version
+      - name: Bump-up ${{ env.CURRENT_VERSION }} -> ${{ env.NEW_VERSION }} version
+        run: |
+          bumpversion ${{ inputs.flag }}
+
+      # Committing and pushing the changes
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Action: Bump-up Version"
+          git config --global user.email "username@users.noreply.github.com"
+          git commit -a -m "Bump up $CURRENT_VERSION -> $NEW_VERSION"
+          git push origin dlpx/bumpup/${{ inputs.flag }}
+
+      - name: Create pull request
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: dlpx/bumpup/${{ inputs.flag }}
+          destination_branch: ${{ inputs.base }}
+          pr_title: |
+            <JIRA-Placeholder> Bump up $CURRENT_VERSION -> $NEW_VERSION
+          pr_body: |
+            This is an automated pull request created to set the next dvp package release version. This PR will 
+            always contain below files:
+                - common/src/main/python/dlpx/virtualization/common/VERSION
+                - dvp/src/main/python/dlpx/virtualization/VERSION
+                - libs/src/main/python/dlpx/virtualization/libs/VERSION
+                - platform/src/main/python/dlpx/virtualization/platform/VERSION
+                - tools/src/main/python/dlpx/virtualization/_internal/VERSION
+                - tools/src/test/python/dlpx/virtualization/_internal/test_package_util.py
+                - .bumpversion.cfg
+            Please follow below steps :
+              - Create a JIRA or Issue with title as \"Bump up $CURRENT_VERSION -> $NEW_VERSION\" and replace the
+                <JIRA-Placeholder> with JIRA ID or Issue ID.
+              - Make sure all the checks are successful.
+              - Get required approvals from code owners.
+            Once done, merge the pull request with merge commit (do not use a squash commit!).
+              - Merge must not invoke a release to pypi.
+          pr_label: no-release
+          pr_draft: false
